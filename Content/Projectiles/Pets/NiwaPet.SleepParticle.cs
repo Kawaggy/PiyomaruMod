@@ -15,44 +15,46 @@ namespace PiyomaruMod.Content.Projectiles.Pets
         float OriginalX;
         public override void Initialize()
         {
-            OriginalX = Position.X;
-            Timer[0] = (MathHelper.TwoPi / 120) * Main.rand.Next(120);
+            OriginalX = position.X;
+            timer[0] = (MathHelper.TwoPi / 120) * Main.rand.Next(120);
         }
 
         public override void Update()
         {
-            Timer[0] += MathHelper.TwoPi / 120;
-            Timer[0] = MathHelper.WrapAngle(Timer[0]);
+            timer[0] += MathHelper.TwoPi / 120;
+            timer[0] = MathHelper.WrapAngle(timer[0]);
 
-            Position = new Vector2(OriginalX, Position.Y);
-            Position -= new Vector2(0, 0.25f);
-            Position += new Vector2((float)Math.Sin(Timer[0]) * 16f, 0f);
-            Position += Velocity;
+            position = new Vector2(OriginalX, position.Y);
+            position.Y -= 0.25f;
+            position.X += (float)Math.Sin(timer[0]) * 16f;
+            position += velocity;
 
-            if (++FrameCounter >= 45 && Frame < 5)
+            if (++frameCounter >= 45 && frame < 5)
             {
-                Frame++;
-                FrameCounter = 0;
+                frame++;
+                frameCounter = 0;
             }
-            else if (Frame >= 5)
+            else if (frame >= 5)
             {
-                Active = false;
+                active = false;
             }
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             Texture2D texture = ModContent.GetTexture("PiyomaruMod/Assets/ExtraTextures/Niwa/Sleeping");
-            Rectangle frame = texture.Frame(1, 5, 0, Frame);
+            Rectangle rectangle = texture.Frame(1, 5, 0, frame);
 
-            if (Entity is Player player)
-                Shader = GameShaders.Armor.GetSecondaryShader(player.cPet, player);
+            if (entity is Player player)
+                shader = GameShaders.Armor.GetSecondaryShader(player.cPet, player);
 
-            if (Shader != null)
-                if (Shader is ArmorShaderData data)
+            if (shader != null)
+            {
+                if (shader is ArmorShaderData data)
                     data.Apply(null);
+            }
 
-            spriteBatch.Draw(texture, Position - Main.screenPosition, frame, Color.White * Alpha, 0, texture.Size() / 2, Scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(texture, position - Main.screenPosition, rectangle, Color.White * alpha, 0, texture.Size() / 2, scale, SpriteEffects.None, 0);
 
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         }
@@ -62,9 +64,9 @@ namespace PiyomaruMod.Content.Projectiles.Pets
             float angle = MathHelper.Pi / 4f;
             for (int i = 0; i < 4; i++)
             {
-                Explodey explodey = new Explodey(Position, new Vector2(0, 4).RotatedBy(angle), Vector2.One, 1f);
-                explodey.SetEntity(Entity);
-                explodey.SetShader(Shader);
+                Explodey explodey = new Explodey(position, new Vector2(0, 4).RotatedBy(angle), Vector2.One, 1f);
+                explodey.entity = entity;
+                explodey.shader = shader;
                 angle += MathHelper.PiOver2;
             }
         }

@@ -8,10 +8,10 @@ namespace PiyomaruMod
 {
 	public class PiyomaruMod : Mod
 	{
-        public static List<IParticle> particles;
+        public static List<Particle> particles;
         public override void Load()
         {
-            particles = new List<IParticle>();
+            particles = new List<Particle>();
             On.Terraria.Main.DrawDust += DrawParticles;
             On.Terraria.Main.DoUpdate += UpdateParticles;
         }
@@ -43,17 +43,17 @@ namespace PiyomaruMod
         {
             for (int i = 0; i < particles.Count; i++)
             {
-                if (!particles[i].Active)
+                if (!particles[i].active)
                 {
                     particles[i].Kill();
                     particles.RemoveAt(i);
                     continue;
                 }
 
-                if (!particles[i].Initialized)
+                if (!particles[i].initialized)
                 {
                     particles[i].Initialize();
-                    particles[i].Initialized = true;
+                    particles[i].initialized = true;
                 }
 
                 particles[i].Update();
@@ -65,7 +65,7 @@ namespace PiyomaruMod
             Main.spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, SamplerState.PointClamp, DepthStencilState.None, RasterizerState.CullNone, null, Main.GameViewMatrix.TransformationMatrix);
             for (int i = 0; i < particles.Count; i++)
             {
-                if (!particles[i].Active)
+                if (!particles[i].active)
                 {
                     continue;
                 }

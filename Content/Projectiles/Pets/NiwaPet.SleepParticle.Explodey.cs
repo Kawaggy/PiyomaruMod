@@ -12,25 +12,25 @@ namespace PiyomaruMod.Content.Projectiles.Pets
 
         public override void Update()
         {
-            Position += Velocity;
-            Velocity *= 0.95f;
+            position += velocity;
+            velocity *= 0.95f;
 
-            if (++Timer[0] > 60)
-                Active = false;
+            if (++timer[0] > 60)
+                active = false;
 
-            Alpha = 0.5f - (Timer[0] / 120);
+            alpha = 0.5f - (timer[0] / 120);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            if (Entity is Player player)
-                Shader = GameShaders.Armor.GetSecondaryShader(player.cPet, player);
+            if (entity is Player player)
+                shader = GameShaders.Armor.GetSecondaryShader(player.cPet, player);
 
-            if (Shader != null)
-                if (Shader is ArmorShaderData data)
+            if (shader != null)
+                if (shader is ArmorShaderData data)
                     data.Apply(null);
 
-            spriteBatch.Draw(Main.magicPixel, Position - Main.screenPosition, new Rectangle(0, 0, 2, 6), new Color(208, 0, 52, 255) * Alpha, Velocity.ToRotation() + MathHelper.PiOver2, new Vector2(1, 0), Scale, SpriteEffects.None, 0f);
+            spriteBatch.Draw(Main.magicPixel, position - Main.screenPosition, new Rectangle(0, 0, 2, 6), new Color(208, 0, 52, 255) * alpha, velocity.ToRotation() + MathHelper.PiOver2, new Vector2(1, 0), scale, SpriteEffects.None, 0f);
 
             Main.pixelShader.CurrentTechnique.Passes[0].Apply();
         }
